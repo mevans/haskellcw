@@ -1,5 +1,6 @@
 {
 module Lexer where
+import Tokens
 }
 
 %wrapper "basic"
@@ -12,8 +13,3 @@ tokens :-
   $white+       ;
   "--".*        ;
   S@number {\s -> TokenStream (read (tail s))}
-{
-data Token =
-  TokenStream Int
-  deriving (Eq,Show)
-}
