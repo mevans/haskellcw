@@ -1,5 +1,6 @@
 module Tokens where
 
 data Token =
-  TokenStream Int
+  TokenStream Int |
+  TokenInt Int
   deriving (Eq,Show)

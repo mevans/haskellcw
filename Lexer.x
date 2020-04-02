@@ -12,4 +12,5 @@ $alpha = [a-zA-Z]
 tokens :-
   $white+       ;
   "--".*        ;
-  S@number {\s -> TokenStream (read (tail s))}
+  @number  { \s -> TokenInt (read s) }
+  S@number { \s -> TokenStream (read (tail s)) }
