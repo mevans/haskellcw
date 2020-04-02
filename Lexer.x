@@ -12,5 +12,6 @@ $alpha = [a-zA-Z]
 tokens :-
   $white+       ;
   "--".*        ;
+  push     { \s -> TokenPush }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }

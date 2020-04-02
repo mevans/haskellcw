@@ -22,7 +22,8 @@ main = do
     let programFileName = args !! 1
     programContents <- readFile programFileName
     let programTokens = alexScanTokens programContents
-    putStrLn(show programTokens)
+    let parsedProgram = parse programTokens
+    putStrLn(show parsedProgram)
 
 --    contents <- readFile textFileName
 --    let tokens = alexScanTokens contents
