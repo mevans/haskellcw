@@ -7,7 +7,7 @@ import Tokens
 $digit = 0-9
 $nonZero = 1-9
 $alpha = [a-zA-Z]
-@number = $nonZero[$digit]*
+@number = 0 | $nonZero[$digit]*
 
 tokens :-
   $white+       ;
