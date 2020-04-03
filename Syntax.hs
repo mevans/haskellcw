@@ -15,4 +15,5 @@ data Exp = SLet String Exp
          | SFalse
          | SIf Exp Exp Exp
          | SLength Exp
+         | SVoid
     deriving Show

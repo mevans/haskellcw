@@ -4,6 +4,7 @@ import Syntax
 type Environment = [(String,Exp)]
 data Frame = HAdd Exp Environment | AddH Exp
            | HLength Environment
+           | HLet String
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont)
@@ -14,6 +15,8 @@ getStream n environment = case result of
                             Nothing -> error "Not found"
             where result = (lookup ("S" ++ show n) environment)
 
+addToEnvironment :: String -> Exp -> Environment -> Environment
+addToEnvironment var e env = (var, e) : filter (\m -> (fst m) /= var) env
 
 
 eval1 :: State -> State
@@ -29,3 +32,7 @@ eval1 ((SIntList is), env1, (HLength env2) : k) = (SInt (length is), [], k)
 
 -- Stream
 eval1 ((SStream n), env, k) = (getStream n env, env, k)
+
+-- Let variable
+eval1 ((SLet var e), env, k) = (e, env, (HLet var) : k)
+eval1 (e, env, (HLet var) : k) = (SVoid, addToEnvironment var e env, k)
