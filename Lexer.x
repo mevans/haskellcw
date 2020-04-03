@@ -12,7 +12,10 @@ $alpha = [a-zA-Z]
 tokens :-
   $white+       ;
   "--".*        ;
+  let      { \s -> TokenLet }
+  \=       { \s -> TokenEq }
   push     { \s -> TokenPush }
   at       { \s -> TokenAt }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
+  $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}

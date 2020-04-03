@@ -1,2 +1,2 @@
-push S1 at 3
-push S2 at 9
+let x = S1 at 0
+push x

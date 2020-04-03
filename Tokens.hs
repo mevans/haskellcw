@@ -4,5 +4,8 @@ data Token =
   TokenStream Int |
   TokenInt Int |
   TokenPush |
-  TokenAt
+  TokenAt |
+  TokenLet |
+  TokenEq |
+  TokenVar String
   deriving (Eq,Show)
