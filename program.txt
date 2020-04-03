@@ -1,1 +1,2 @@
-push S1 at 0
+push S1 at 3
+push S2 at 9

@@ -12,10 +12,15 @@ import Tokens
   push { TokenPush }
   at { TokenAt }
 
+%right push at
 %%
 
+Statements : Statement { [$1] }
+           | Statement Statements { $1 : $2 }
+
+Statement : push Exp { Push $2 }
+
 Exp : Exp at Exp { At $1 $3}
-    | push Exp { Push $2 }
     | stream { Stream $1 }
     | int { Int $1 }
 
