@@ -13,6 +13,8 @@ import Tokens
   '-' { TokenMinus }
   '*' { TokenMultiply }
   '/' { TokenDivide }
+  '(' { TokenParenLeft }
+  ')' { TokenParenRight }
   var { TokenVar $$ }
   int { TokenInt $$ }
   stream { TokenStream $$ }
@@ -38,6 +40,7 @@ Exp : Exp at Exp { At $1 $3}
     | Exp '-' Exp { Minus $1 $3 }
     | Exp '*' Exp { Multiply $1 $3 }
     | Exp '/' Exp { Divide $1 $3 }
+    | '(' Exp ')' { $2 }
 
 {
 parseError :: [Token] -> a

@@ -18,6 +18,8 @@ tokens :-
   \-       { \s -> TokenMinus }
   \*       { \s -> TokenMultiply }
   \/       { \s -> TokenDivide }
+  \(       { \s -> TokenParenLeft }
+  \)       { \s -> TokenParenRight }
   push     { \s -> TokenPush }
   at       { \s -> TokenAt }
   @number  { \s -> TokenInt (read s) }

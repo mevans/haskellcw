@@ -11,5 +11,7 @@ data Token =
   TokenMinus |
   TokenMultiply |
   TokenDivide |
+  TokenParenLeft |
+  TokenParenRight |
   TokenVar String
   deriving (Eq,Show)

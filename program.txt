@@ -1,2 +1,2 @@
-let x = S1 at 0
-push x + 3
+let x = (S1 at 0) + 3
+push x
