@@ -1,14 +1,16 @@
 module Syntax where
 
-data Exp = Let String Exp
-         | At Exp Exp
-         | Push Exp
-         | Stream Int
-         | Int Int
-         | Var String
-         | Plus Exp Exp
-         | Minus Exp Exp
-         | Multiply Exp Exp
-         | Divide Exp Exp
-         | Void
+data Exp = SLet String Exp
+         | SAt Exp Exp
+         | SPush Exp
+         | SStream Int
+         | SInt Int
+         | SVar String
+         | SPlus Exp Exp
+         | SMinus Exp Exp
+         | SMultiply Exp Exp
+         | SDivide Exp Exp
+         | STrue
+         | SFalse
+         | SIf Exp Exp Exp
     deriving Show

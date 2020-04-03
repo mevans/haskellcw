@@ -22,6 +22,11 @@ tokens :-
   \)       { \s -> TokenParenRight }
   push     { \s -> TokenPush }
   at       { \s -> TokenAt }
+  true     { \s -> TokenTrue }
+  false    { \s -> TokenFalse }
+  if       { \s -> TokenIf }
+  then       { \s -> TokenThen }
+  else       { \s -> TokenElse }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}

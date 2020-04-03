@@ -2,7 +2,6 @@ import Lexer
 import Parser
 import System.Environment
 import System.IO
-import Eval
 
 parseInput x = map (\l -> map (\n -> read n:: Integer) l)(map words (lines x))
 
@@ -26,7 +25,7 @@ main = do
     let parsedProgram = parse programTokens
 --    putStrLn(show parsedProgram)
     putStrLn(show parsedProgram)
-    eval parsedProgram
+--    eval parsedProgram
 
 --    contents <- readFile textFileName
 --    let tokens = alexScanTokens contents

@@ -13,5 +13,10 @@ data Token =
   TokenDivide |
   TokenParenLeft |
   TokenParenRight |
+  TokenTrue |
+  TokenFalse |
+  TokenIf |
+  TokenThen |
+  TokenElse |
   TokenVar String
   deriving (Eq,Show)

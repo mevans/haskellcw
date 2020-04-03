@@ -21,6 +21,11 @@ import Syntax
   stream { TokenStream $$ }
   push { TokenPush }
   at { TokenAt }
+  true { TokenTrue }
+  false { TokenFalse }
+  if { TokenIf }
+  then { TokenThen }
+  else { TokenElse }
 
 %right push at
 %left '+' '-'
@@ -30,18 +35,21 @@ import Syntax
 Statements : Statement { [$1] }
            | Statement Statements { $1 : $2 }
 
-Statement : push Exp { Push $2 }
-          | let var '=' Exp { Let $2 $4 }
+Statement : push Exp { SPush $2 }
+          | let var '=' Exp { SLet $2 $4 }
 
-Exp : Exp at Exp { At $1 $3}
-    | stream { Stream $1 }
-    | int { Int $1 }
-    | var { Var $1 }
-    | Exp '+' Exp { Plus $1 $3 }
-    | Exp '-' Exp { Minus $1 $3 }
-    | Exp '*' Exp { Multiply $1 $3 }
-    | Exp '/' Exp { Divide $1 $3 }
+Exp : Exp at Exp { SAt $1 $3}
+    | stream { SStream $1 }
+    | int { SInt $1 }
+    | var { SVar $1 }
+    | Exp '+' Exp { SPlus $1 $3 }
+    | Exp '-' Exp { SMinus $1 $3 }
+    | Exp '*' Exp { SMultiply $1 $3 }
+    | Exp '/' Exp { SDivide $1 $3 }
     | '(' Exp ')' { $2 }
+    | true { STrue }
+    | false { SFalse }
+    | if Exp then Exp else Exp { SIf $2 $4 $6}
 
 {
 
