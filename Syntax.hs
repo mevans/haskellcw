@@ -5,6 +5,7 @@ data Exp = SLet String Exp
          | SPush Exp
          | SStream Int
          | SInt Int
+         | SIntList [Int]
          | SVar String
          | SPlus Exp Exp
          | SMinus Exp Exp
