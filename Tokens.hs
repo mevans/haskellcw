@@ -7,5 +7,9 @@ data Token =
   TokenAt |
   TokenLet |
   TokenEq |
+  TokenPlus |
+  TokenMinus |
+  TokenMultiply |
+  TokenDivide |
   TokenVar String
   deriving (Eq,Show)

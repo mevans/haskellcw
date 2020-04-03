@@ -14,6 +14,10 @@ tokens :-
   "--".*        ;
   let      { \s -> TokenLet }
   \=       { \s -> TokenEq }
+  \+       { \s -> TokenPlus }
+  \-       { \s -> TokenMinus }
+  \*       { \s -> TokenMultiply }
+  \/       { \s -> TokenDivide }
   push     { \s -> TokenPush }
   at       { \s -> TokenAt }
   @number  { \s -> TokenInt (read s) }
