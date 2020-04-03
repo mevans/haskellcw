@@ -1,1 +1,1 @@
-push if true then 5 else 4
+5 + 5

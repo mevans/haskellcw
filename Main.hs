@@ -1,5 +1,6 @@
 import Lexer
 import Parser
+import Eval
 import System.Environment
 import System.IO
 
@@ -23,8 +24,14 @@ main = do
     programContents <- readFile programFileName
     let programTokens = alexScanTokens programContents
     let parsedProgram = parse programTokens
---    putStrLn(show parsedProgram)
-    putStrLn(show parsedProgram)
+    putStrLn(show (head parsedProgram))
+    let state = ((head parsedProgram), [], [])
+    let afterOne = eval1 state
+    putStrLn(show afterOne)
+    let afterTwo = eval1 afterOne
+    putStrLn(show afterTwo)
+    let afterThree = eval1 afterTwo
+    putStrLn(show afterThree)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName
