@@ -23,20 +23,22 @@ main = do
     let lines = parseInput contents
     let streams = rowsToColumns lines
     let initialEnv = columnsToEnvironment streams
-    putStrLn (show initialEnv)
+--    let v = getStream 1 initialEnv
 
     let programFileName = args !! 1
     programContents <- readFile programFileName
     let programTokens = alexScanTokens programContents
     let parsedProgram = parse programTokens
     putStrLn(show (head parsedProgram))
-    let state = ((head parsedProgram), [], [])
+    let state = ((head parsedProgram), initialEnv, [])
     let afterOne = eval1 state
     putStrLn(show afterOne)
     let afterTwo = eval1 afterOne
     putStrLn(show afterTwo)
     let afterThree = eval1 afterTwo
     putStrLn(show afterThree)
+    let afterLoads = eval1 (eval1 (eval1 afterThree))
+    putStrLn(show afterLoads)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName

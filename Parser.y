@@ -27,8 +27,6 @@ import Syntax
   then { TokenThen }
   else { TokenElse }
   length { TokenLength }
-  '[' { TokenBracketLeft }
-  ']' { TokenBracketRight }
 
 %right push at length '['
 %left '+' '-' ']'
