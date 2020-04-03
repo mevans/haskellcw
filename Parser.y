@@ -1,6 +1,7 @@
 {
 module Parser where
 import Tokens
+import Syntax
 }
 
 %name parse
@@ -43,19 +44,8 @@ Exp : Exp at Exp { At $1 $3}
     | '(' Exp ')' { $2 }
 
 {
+
 parseError :: [Token] -> a
 parseError a = error ("Parse error" ++ show a)
-
-data Exp = Let String Exp
-         | At Exp Exp
-         | Push Exp
-         | Stream Int
-         | Int Int
-         | Var String
-         | Plus Exp Exp
-         | Minus Exp Exp
-         | Multiply Exp Exp
-         | Divide Exp Exp
-    deriving Show
 
 }
