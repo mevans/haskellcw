@@ -18,5 +18,6 @@ data Token =
   TokenIf |
   TokenThen |
   TokenElse |
+  TokenLength |
   TokenVar String
   deriving (Eq,Show)

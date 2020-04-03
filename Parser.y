@@ -26,9 +26,12 @@ import Syntax
   if { TokenIf }
   then { TokenThen }
   else { TokenElse }
+  length { TokenLength }
+  '[' { TokenBracketLeft }
+  ']' { TokenBracketRight }
 
-%right push at
-%left '+' '-'
+%right push at length '['
+%left '+' '-' ']'
 %left '*' '/'
 %%
 
@@ -51,6 +54,7 @@ Exp : Exp at Exp { SAt $1 $3}
     | true { STrue }
     | false { SFalse }
     | if Exp then Exp else Exp { SIf $2 $4 $6}
+    | length Exp { SLength $2 }
 
 {
 

@@ -25,8 +25,9 @@ tokens :-
   true     { \s -> TokenTrue }
   false    { \s -> TokenFalse }
   if       { \s -> TokenIf }
-  then       { \s -> TokenThen }
-  else       { \s -> TokenElse }
+  then     { \s -> TokenThen }
+  else     { \s -> TokenElse }
+  length   { \s -> TokenLength }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}
