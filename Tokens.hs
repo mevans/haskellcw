@@ -3,5 +3,6 @@ module Tokens where
 data Token =
   TokenStream Int |
   TokenInt Int |
-  TokenPush
+  TokenPush |
+  TokenAt
   deriving (Eq,Show)

@@ -13,5 +13,6 @@ tokens :-
   $white+       ;
   "--".*        ;
   push     { \s -> TokenPush }
+  at       { \s -> TokenAt }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
