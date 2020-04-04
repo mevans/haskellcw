@@ -46,7 +46,7 @@ eval1 (e, env, (HLet var) : k, o) = (SVoid, addToEnvironment var e env, k, o)
 
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)
-eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, i : o)
+eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, o ++ [i])
 
 -- At
 
@@ -56,8 +56,13 @@ eval1 (list@(SIntList is), env1, (HAt e env2) : k, o) = (e, env2, (AtH list) : k
 eval1 ((SInt i), env, (AtH (SIntList is)) : k, o) = (SInt (is !! i), env, k, o)
 
 
-eval :: State -> [Int]
+eval :: State -> State
 eval input@(e, env, k, o)
-    | isTerminated state = o'
+    | isTerminated state = state
     | otherwise = eval state
     where state@(e', env', k', o') = eval1 input
+
+evalBlock :: [Exp] -> Environment -> [Int] -> [Int]
+evalBlock [] env acc = acc
+evalBlock (e:es) env acc = evalBlock es env' o'
+        where result@(e', env', k', o') = eval (e, env, [], acc)

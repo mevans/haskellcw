@@ -24,10 +24,10 @@ main = do
     programContents <- readFile programFileName
     let programTokens = alexScanTokens programContents
     let parsedProgram = parse programTokens
-    putStrLn(show (head parsedProgram))
+--    putStrLn(show (head parsedProgram))
     let initialState = ((head parsedProgram), initialEnv, [], [])
-    let evaluatedState = eval initialState
-    putStrLn(show evaluatedState)
+    let evaluatedBlock = evalBlock parsedProgram initialEnv []
+    putStrLn(show evaluatedBlock)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName
