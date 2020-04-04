@@ -13,10 +13,13 @@ type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
 
 getStream :: Int -> Environment -> Exp
-getStream n environment = case result of
-                            Just e -> e
-                            Nothing -> error "Not found"
-            where result = (lookup ("S" ++ show n) environment)
+getStream n env = getVariable ("S" ++ show n) env
+
+getVariable :: String -> Environment -> Exp
+getVariable var environment = case result of
+                                Just e -> e
+                                Nothing -> error "Not found"
+                              where result = (lookup var environment)
 
 addToEnvironment :: String -> Exp -> Environment -> Environment
 addToEnvironment var e env = (var, e) : filter (\m -> (fst m) /= var) env
@@ -54,6 +57,9 @@ eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, o ++ [i])
 eval1 ((SAt e1 e2), env, k, o) = (e1, env, (HAt e2 env) : k, o)
 eval1 (list@(SIntList is), env1, (HAt e env2) : k, o) = (e, env2, (AtH list) : k, o)
 eval1 ((SInt i), env, (AtH (SIntList is)) : k, o) = (SInt (is !! i), env, k, o)
+
+-- Variables
+eval1 ((SVar var), env, k, o) = (getVariable var env, env, k, o)
 
 
 eval :: State -> State
