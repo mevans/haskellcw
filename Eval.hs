@@ -7,6 +7,7 @@ data Frame = HAdd Exp Environment | AddH Exp
            | HLength Environment
            | HLet String
            | HPush Environment
+           | HAt Exp Environment | AtH Exp
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
@@ -46,6 +47,24 @@ eval1 (e, env, (HLet var) : k, o) = (SVoid, addToEnvironment var e env, k, o)
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)
 eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, i : o)
+
+-- At
+--eval1 ((SPlus e1 e2), env, k, o) = (e1, env, (HAdd e2 env) : k, o)
+--eval1 ((SInt i), env1, (HAdd e env2) : k, o) = (e, env2, (AddH (SInt i)) : k, o)
+--eval1 ((SInt j), env, (AddH (SInt i)) : k, o) = (SInt (i + j), [], k, o)
+
+-- S1 at index
+-- e1 reduces to stream, e2 reduces to int
+eval1 ((SAt e1 e2), env, k, o) = (e1, env, (HAt e2 env) : k, o)
+eval1 ((SIntList is), env1, (HAt e env2) : k, o) = (e, env2, (AtH (SIntList is)) : k, o)
+eval1 ((SInt i), env, (AtH (SIntList is)) : k, o) = (SInt (is !! i), env, k, o)
+
+
+
+
+
+--eval1 ((SIntList is), env1, (HAt e2 env2) : k, o) = (e2, env2, (AtH ()))
+--eval1 ((SIntList is), env, (HAt i) : k, o) = (SInt (is !! i), env, k, o)
 
 
 eval :: State -> [Int]
