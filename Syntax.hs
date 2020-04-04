@@ -16,4 +16,4 @@ data Exp = SLet String Exp
          | SIf Exp Exp Exp
          | SLength Exp
          | SVoid
-    deriving Show
+    deriving (Show, Eq)

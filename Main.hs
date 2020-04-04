@@ -25,15 +25,9 @@ main = do
     let programTokens = alexScanTokens programContents
     let parsedProgram = parse programTokens
     putStrLn(show (head parsedProgram))
-    let state = ((head parsedProgram), initialEnv, [], [])
-    let afterOne = eval1 state
-    putStrLn(show afterOne)
-    let afterTwo = eval1 afterOne
-    putStrLn(show afterTwo)
-    let afterThree = eval1 afterTwo
-    putStrLn(show afterThree)
-    let afterLoads = eval1 (eval1 (eval1 (eval1 (eval1 (eval1 afterThree)))))
-    putStrLn(show afterLoads)
+    let initialState = ((head parsedProgram), initialEnv, [], [])
+    let evaluatedState = eval initialState
+    putStrLn(show evaluatedState)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName

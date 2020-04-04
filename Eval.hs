@@ -20,6 +20,10 @@ getStream n environment = case result of
 addToEnvironment :: String -> Exp -> Environment -> Environment
 addToEnvironment var e env = (var, e) : filter (\m -> (fst m) /= var) env
 
+isTerminated :: State -> Bool
+-- Only terminate if the last expression is a void, and there is no kont
+isTerminated (SVoid, env, [], o) = True
+isTerminated _ = False
 
 eval1 :: State -> State
 
@@ -42,3 +46,10 @@ eval1 (e, env, (HLet var) : k, o) = (SVoid, addToEnvironment var e env, k, o)
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)
 eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, i : o)
+
+
+eval :: State -> [Int]
+eval input@(e, env, k, o)
+    | isTerminated state = o'
+    | otherwise = eval state
+    where state@(e', env', k', o') = eval1 input

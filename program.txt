@@ -1,1 +1,1 @@
-push 5
+push ((length S1) + 5)
