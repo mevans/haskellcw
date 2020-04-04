@@ -44,10 +44,10 @@ Exp : Exp at Exp { SAt $1 $3}
     | stream { SStream $1 }
     | int { SInt $1 }
     | var { SVar $1 }
-    | Exp '+' Exp { SPlus $1 $3 }
-    | Exp '-' Exp { SMinus $1 $3 }
-    | Exp '*' Exp { SMultiply $1 $3 }
-    | Exp '/' Exp { SDivide $1 $3 }
+    | Exp '+' Exp { SOpp Plus $1 $3 }
+    | Exp '-' Exp { SOpp Minus $1 $3 }
+    | Exp '*' Exp { SOpp Multiply $1 $3 }
+    | Exp '/' Exp { SOpp Divide $1 $3 }
     | '(' Exp ')' { $2 }
     | true { STrue }
     | false { SFalse }

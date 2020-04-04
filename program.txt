@@ -1,3 +1,4 @@
-let x = (5 + 3)
-push (S1 at 0)
-push (x + 3)
+push (3 - 5)
+push (5 - 3)
+push (3 * 5)
+push (5 / 3)

@@ -1,5 +1,8 @@
 module Syntax where
 
+data Operation = Plus | Minus | Multiply | Divide
+    deriving (Show, Eq)
+
 data Exp = SLet String Exp
          | SAt Exp Exp
          | SPush Exp
@@ -7,10 +10,7 @@ data Exp = SLet String Exp
          | SInt Int
          | SIntList [Int]
          | SVar String
-         | SPlus Exp Exp
-         | SMinus Exp Exp
-         | SMultiply Exp Exp
-         | SDivide Exp Exp
+         | SOpp Operation Exp Exp
          | STrue
          | SFalse
          | SIf Exp Exp Exp

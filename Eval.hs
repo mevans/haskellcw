@@ -3,7 +3,7 @@ import Syntax
 
 type Output = [Int]
 type Environment = [(String,Exp)]
-data Frame = HAdd Exp Environment | AddH Exp
+data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HLength Environment
            | HLet String
            | HPush Environment
@@ -31,10 +31,16 @@ isTerminated _ = False
 
 eval1 :: State -> State
 
--- Addition
-eval1 ((SPlus e1 e2), env, k, o) = (e1, env, (HAdd e2 env) : k, o)
-eval1 ((SInt i), env1, (HAdd e env2) : k, o) = (e, env2, (AddH (SInt i)) : k, o)
-eval1 ((SInt j), env, (AddH (SInt i)) : k, o) = (SInt (i + j), env, k, o)
+-- Operations
+eval1 ((SOpp opp e1 e2), env, k, o) = (e1, env, (HOpp opp e2 env) : k, o)
+eval1 ((SInt i), env1, (HOpp opp e env2) : k, o) = (e, env2, (OppH opp (SInt i)) : k, o)
+eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt result, env, k, o)
+    where result = case opp of
+                    Plus -> i + j
+                    Minus -> i - j
+                    Multiply -> i * j
+                    Divide -> div i j
+
 
 -- Length
 eval1 ((SLength l), env, k, o) = (l, env, (HLength env) : k, o)
