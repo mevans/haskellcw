@@ -14,10 +14,14 @@ tokens :-
   "--".*        ;
   let      { \s -> TokenLet }
   \=       { \s -> TokenEq }
+  -- Operators
   \+       { \s -> TokenPlus }
   \-       { \s -> TokenMinus }
   \*       { \s -> TokenMultiply }
   \/       { \s -> TokenDivide }
+  \^       { \s -> TokenPower }
+  \%       { \s -> TokenModulo }
+
   \(       { \s -> TokenParenLeft }
   \)       { \s -> TokenParenRight }
   push     { \s -> TokenPush }

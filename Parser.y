@@ -10,10 +10,14 @@ import Syntax
 %token
   let { TokenLet }
   '=' { TokenEq }
+  -- Operators
   '+' { TokenPlus }
   '-' { TokenMinus }
   '*' { TokenMultiply }
   '/' { TokenDivide }
+  '^' { TokenPower }
+  '%' { TokenModulo }
+
   '(' { TokenParenLeft }
   ')' { TokenParenRight }
   var { TokenVar $$ }
@@ -44,10 +48,14 @@ Exp : Exp at Exp { SAt $1 $3}
     | stream { SStream $1 }
     | int { SInt $1 }
     | var { SVar $1 }
+    -- Operations
     | Exp '+' Exp { SOpp Plus $1 $3 }
     | Exp '-' Exp { SOpp Minus $1 $3 }
     | Exp '*' Exp { SOpp Multiply $1 $3 }
     | Exp '/' Exp { SOpp Divide $1 $3 }
+    | Exp '%' Exp { SOpp Mod $1 $3 }
+    | Exp '^' Exp { SOpp Pow $1 $3 }
+
     | '(' Exp ')' { $2 }
     | true { STrue }
     | false { SFalse }

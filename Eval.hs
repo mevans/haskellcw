@@ -40,6 +40,8 @@ eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt result, env, k, o)
                     Minus -> i - j
                     Multiply -> i * j
                     Divide -> div i j
+                    Pow -> i ^ j
+                    Mod -> mod i j
 
 
 -- Length

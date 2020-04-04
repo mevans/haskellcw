@@ -1,6 +1,6 @@
 module Syntax where
 
-data Operation = Plus | Minus | Multiply | Divide
+data Operation = Plus | Minus | Multiply | Divide | Pow | Mod
     deriving (Show, Eq)
 
 data Exp = SLet String Exp

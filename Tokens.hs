@@ -7,10 +7,14 @@ data Token =
   TokenAt |
   TokenLet |
   TokenEq |
+  -- Operators
   TokenPlus |
   TokenMinus |
   TokenMultiply |
   TokenDivide |
+  TokenPower |
+  TokenModulo |
+
   TokenParenLeft |
   TokenParenRight |
   TokenTrue |
