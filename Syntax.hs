@@ -16,4 +16,5 @@ data Exp = SLet String Exp
          | SIf Exp Exp Exp
          | SLength Exp
          | SVoid
+         | SAssign String Exp
     deriving (Show, Eq)

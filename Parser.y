@@ -42,7 +42,7 @@ Statements : Statement { [$1] }
 
 Statement : push Exp { SPush $2 }
           | let var '=' Exp { SLet $2 $4 }
-          | Exp { $1 }
+          | var '=' Exp { SAssign $1 $3 }
 
 Exp : Exp at Exp { SAt $1 $3}
     | stream { SStream $1 }

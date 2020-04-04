@@ -6,6 +6,7 @@ type Environment = [(String,Exp)]
 data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HLength Environment
            | HLet String
+           | HAssign String
            | HPush Environment
            | HAt Exp Environment | AtH Exp
     deriving Show
@@ -23,6 +24,12 @@ getVariable var environment = case result of
 
 addToEnvironment :: String -> Exp -> Environment -> Environment
 addToEnvironment var e env = (var, e) : filter (\m -> (fst m) /= var) env
+
+reassign :: String -> Exp -> Environment -> Environment
+reassign var e env = case result of
+                        Just e' -> addToEnvironment var e env
+                        Nothing -> error (var ++ " not initialised")
+                    where result = lookup var env
 
 isTerminated :: State -> Bool
 -- Only terminate if the last expression is a void, and there is no kont
@@ -54,6 +61,10 @@ eval1 ((SStream n), env, k, o) = (getStream n env, env, k, o)
 -- Let variable
 eval1 ((SLet var e), env, k, o) = (e, env, (HLet var) : k, o)
 eval1 (e, env, (HLet var) : k, o) = (SVoid, addToEnvironment var e env, k, o)
+
+-- Re-assign variable
+eval1 ((SAssign var e), env, k, o) = (e, env, (HAssign var) : k, o)
+eval1 (e, env, (HAssign var) : k, o) = (SVoid, reassign var e env, k, o)
 
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)
