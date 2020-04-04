@@ -1,3 +1,2 @@
-let x = 10
-x /= 5
+let x = range 0 (length S1)
 push x

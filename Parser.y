@@ -31,8 +31,9 @@ import Syntax
   then { TokenThen }
   else { TokenElse }
   length { TokenLength }
+  range { TokenRange }
 
-%right push at length '['
+%right push at length '[' range
 %left '+' '-' ']'
 %left '*' '/'
 %%
@@ -55,6 +56,7 @@ Exp : Exp at Exp { SAt $1 $3}
     | false { SFalse }
     | if Exp then Exp else Exp { SIf $2 $4 $6}
     | length Exp { SLength $2 }
+    | range Exp Exp { SRange $2 $3}
 
 Operation : '+' { Plus }
           | '-' { Minus }

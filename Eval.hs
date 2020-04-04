@@ -10,6 +10,7 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HPush Environment
            | HAt Exp Environment | AtH Exp
            | HAssignOpp Operation String | AssignOppH Operation String Exp
+           | HRange Exp | RangeH Exp
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
@@ -78,6 +79,8 @@ eval1 (e, env, (HAssign var) : k, o) = (SVoid, reassign var e env, k, o)
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)
 eval1 ((SInt i), env1, (HPush env2) : k, o) = (SVoid, env1, k, o ++ [i])
+-- Push list to output
+eval1 ((SIntList is), env1, (HPush env2) : k, o) = (SVoid, env1, k, o ++ is)
 
 -- At
 
@@ -88,6 +91,11 @@ eval1 ((SInt i), env, (AtH (SIntList is)) : k, o) = (SInt (is !! i), env, k, o)
 
 -- Variables
 eval1 ((SVar var), env, k, o) = (getVariable var env, env, k, o)
+
+-- Range
+eval1 ((SRange e1 e2), env, k, o) = (e1, env, (HRange e2) : k, o)
+eval1 (first@(SInt i), env, (HRange e2) : k, o) = (e2, env, (RangeH first) : k, o)
+eval1 ((SInt i), env, (RangeH (SInt j)) : k, o) = ((SIntList [j..i]), env, k, o)
 
 
 eval :: State -> State

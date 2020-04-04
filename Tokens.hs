@@ -23,5 +23,6 @@ data Token =
   TokenThen |
   TokenElse |
   TokenLength |
+  TokenRange |
   TokenVar String
   deriving (Eq,Show)
