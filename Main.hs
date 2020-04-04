@@ -25,7 +25,7 @@ main = do
     let programTokens = alexScanTokens programContents
     let parsedProgram = parse programTokens
     putStrLn(show (head parsedProgram))
-    let state = ((head parsedProgram), initialEnv, [])
+    let state = ((head parsedProgram), initialEnv, [], [])
     let afterOne = eval1 state
     putStrLn(show afterOne)
     let afterTwo = eval1 afterOne
