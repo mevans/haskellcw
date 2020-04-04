@@ -11,6 +11,7 @@ data Exp = SLet String Exp
          | SIntList [Int]
          | SVar String
          | SOpp Operation Exp Exp
+         | SAssignOpp Operation String Exp
          | STrue
          | SFalse
          | SIf Exp Exp Exp

@@ -43,24 +43,25 @@ Statements : Statement { [$1] }
 Statement : push Exp { SPush $2 }
           | let var '=' Exp { SLet $2 $4 }
           | var '=' Exp { SAssign $1 $3 }
+          | var Operation '=' Exp { SAssignOpp $2 $1 $4 }
 
 Exp : Exp at Exp { SAt $1 $3}
     | stream { SStream $1 }
     | int { SInt $1 }
     | var { SVar $1 }
-    -- Operations
-    | Exp '+' Exp { SOpp Plus $1 $3 }
-    | Exp '-' Exp { SOpp Minus $1 $3 }
-    | Exp '*' Exp { SOpp Multiply $1 $3 }
-    | Exp '/' Exp { SOpp Divide $1 $3 }
-    | Exp '%' Exp { SOpp Mod $1 $3 }
-    | Exp '^' Exp { SOpp Pow $1 $3 }
-
+    | Exp Operation Exp { SOpp $2 $1 $3 }
     | '(' Exp ')' { $2 }
     | true { STrue }
     | false { SFalse }
     | if Exp then Exp else Exp { SIf $2 $4 $6}
     | length Exp { SLength $2 }
+
+Operation : '+' { Plus }
+          | '-' { Minus }
+          | '*' { Multiply }
+          | '/' { Divide }
+          | '%' { Mod }
+          | '^' { Pow }
 
 {
 

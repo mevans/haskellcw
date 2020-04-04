@@ -9,6 +9,7 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HAssign String
            | HPush Environment
            | HAt Exp Environment | AtH Exp
+           | HAssignOpp Operation String | AssignOppH Operation String Exp
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
@@ -19,7 +20,7 @@ getStream n env = getVariable ("S" ++ show n) env
 getVariable :: String -> Environment -> Exp
 getVariable var environment = case result of
                                 Just e -> e
-                                Nothing -> error "Not found"
+                                Nothing -> error (var ++ " not initialised")
                               where result = (lookup var environment)
 
 addToEnvironment :: String -> Exp -> Environment -> Environment
@@ -36,20 +37,28 @@ isTerminated :: State -> Bool
 isTerminated (SVoid, env, [], o) = True
 isTerminated _ = False
 
+applyOperation :: Operation -> Int -> Int -> Int
+applyOperation operation i j = result
+        where result = case operation of
+                Plus -> i + j
+                Minus -> i - j
+                Multiply -> i * j
+                Divide -> div i j
+                Pow -> i ^ j
+                Mod -> mod i j
+
 eval1 :: State -> State
 
 -- Operations
 eval1 ((SOpp opp e1 e2), env, k, o) = (e1, env, (HOpp opp e2 env) : k, o)
 eval1 ((SInt i), env1, (HOpp opp e env2) : k, o) = (e, env2, (OppH opp (SInt i)) : k, o)
-eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt result, env, k, o)
-    where result = case opp of
-                    Plus -> i + j
-                    Minus -> i - j
-                    Multiply -> i * j
-                    Divide -> div i j
-                    Pow -> i ^ j
-                    Mod -> mod i j
+eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt (applyOperation opp i j), env, k, o)
 
+
+-- Assign Operations
+eval1 ((SAssignOpp opp var e), env, k, o) = (e, env, (HAssignOpp opp var) : k, o)
+eval1 (e@(SInt i), env, (HAssignOpp opp var) : k, o) = (getVariable var env, env, (AssignOppH opp var e) : k, o)
+eval1 ((SInt i), env, (AssignOppH opp var (SInt j)) : k, o) = (SVoid, reassign var (SInt (applyOperation opp i j)) env, k, o)
 
 -- Length
 eval1 ((SLength l), env, k, o) = (l, env, (HLength env) : k, o)
