@@ -24,5 +24,9 @@ data Token =
   TokenElse |
   TokenLength |
   TokenRange |
+  TokenFor |
+  TokenIn |
+  TokenBraceRight |
+  TokenBraceLeft |
   TokenVar String
   deriving (Eq,Show)

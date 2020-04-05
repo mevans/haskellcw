@@ -1,2 +1,4 @@
-let x = range 0 (length S1)
+for x in (range 0 10) {
 push x
+push x
+}

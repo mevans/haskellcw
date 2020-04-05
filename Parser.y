@@ -32,6 +32,10 @@ import Syntax
   else { TokenElse }
   length { TokenLength }
   range { TokenRange }
+  for { TokenFor }
+  in { TokenIn }
+  '{' { TokenBraceLeft }
+  '}' { TokenBraceRight }
 
 %right push at length '[' range
 %left '+' '-' ']'
@@ -45,6 +49,7 @@ Statement : push Exp { SPush $2 }
           | let var '=' Exp { SLet $2 $4 }
           | var '=' Exp { SAssign $1 $3 }
           | var Operation '=' Exp { SAssignOpp $2 $1 $4 }
+          | for var in Exp '{' Statements '}' { SFor $2 $4 $6 }
 
 Exp : Exp at Exp { SAt $1 $3}
     | stream { SStream $1 }

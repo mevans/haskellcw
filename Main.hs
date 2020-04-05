@@ -26,9 +26,9 @@ main = do
     putStrLn(show programTokens)
     let parsedProgram = parse programTokens
     putStrLn(show parsedProgram)
-    let initialState = ((head parsedProgram), initialEnv, [], [])
-    let evaluatedBlock = evalBlock parsedProgram initialEnv []
-    putStrLn(show evaluatedBlock)
+--    let initialState = ((head parsedProgram), initialEnv, [], [])
+--    let evaluatedBlock = evalBlock parsedProgram initialEnv []
+--    putStrLn(show evaluatedBlock)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName

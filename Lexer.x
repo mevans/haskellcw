@@ -33,6 +33,10 @@ tokens :-
   else     { \s -> TokenElse }
   length   { \s -> TokenLength }
   range    { \s -> TokenRange }
+  for      { \s -> TokenFor }
+  in       { \s -> TokenIn }
+  \{       { \s -> TokenBraceLeft }
+  \}       { \s -> TokenBraceRight }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}
