@@ -100,12 +100,16 @@ eval1 (first@(SInt i), env, (HRange e2) : k, o) = (e2, env, (RangeH first) : k, 
 eval1 ((SInt i), env, (RangeH (SInt j)) : k, o) = ((SIntList [j..i]), env, k, o)
 
 eval1 ((SFor var e es), env, k, o) = (e, env, (HFor var es) : k, o)
-eval1 (e, env, (ForH var [] es i) : k, o) = (e, env, k, o)
-eval1 (e, env, (ForH var is [] i) : k, o) = (e, env, k, o)
 eval1 ((SIntList is), env, (HFor var es) : k, o) = (SVoid, env, (ForH var is es 0) : k, o)
-eval1 (SVoid, env, (ForH var (i:is) es index) : k, o) = (es !! index, addToEnvironment var (SInt i) env, (ForH var is es newIndex) : k, o)
-        -- If the current line is equal to the number of expressions in the block, reset, as the loop is starting a new cycle
-        where newIndex = if index == (length es - 1) then 0 else index + 1
+-- If there is a for loop with an empty range and already at 0 index, chuck it away
+eval1 (e, env, (ForH var [] exps 0) : k, o) = (e, env, k, o)
+eval1 (SVoid, env, (ForH var range@(i:is) exps@(e:es) index) : k, o)
+        -- Loop is starting / starting new cycle (put in first expression, assign variable to next i, add another for loop with index of 1 to kont
+        | index == 0 = (e, addToEnvironment var (SInt i) env, (ForH var range exps 1) : k, o)
+        -- Loop cycle has reached end, back to the top, remove item from range
+        | index == length exps = (SVoid, env, (ForH var is exps 0) : k, o)
+        -- Loop in middle of a cycle
+        | otherwise = (exps !! index, env, (ForH var range exps (index + 1)) : k, o)
 
 eval :: State -> State
 eval input@(e, env, k, o)
