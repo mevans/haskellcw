@@ -11,6 +11,8 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HAt Exp Environment | AtH Exp
            | HAssignOpp Operation String | AssignOppH Operation String Exp
            | HRange Exp | RangeH Exp
+                                                    --  VVV Stores track of current statement in current cycle
+           | HFor String [Exp] | ForH String [Int] [Exp] Int
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
@@ -97,6 +99,13 @@ eval1 ((SRange e1 e2), env, k, o) = (e1, env, (HRange e2) : k, o)
 eval1 (first@(SInt i), env, (HRange e2) : k, o) = (e2, env, (RangeH first) : k, o)
 eval1 ((SInt i), env, (RangeH (SInt j)) : k, o) = ((SIntList [j..i]), env, k, o)
 
+eval1 ((SFor var e es), env, k, o) = (e, env, (HFor var es) : k, o)
+eval1 (e, env, (ForH var [] es i) : k, o) = (e, env, k, o)
+eval1 (e, env, (ForH var is [] i) : k, o) = (e, env, k, o)
+eval1 ((SIntList is), env, (HFor var es) : k, o) = (SVoid, env, (ForH var is es 0) : k, o)
+eval1 (SVoid, env, (ForH var (i:is) es index) : k, o) = (es !! index, addToEnvironment var (SInt i) env, (ForH var is es newIndex) : k, o)
+        -- If the current line is equal to the number of expressions in the block, reset, as the loop is starting a new cycle
+        where newIndex = if index == (length es - 1) then 0 else index + 1
 
 eval :: State -> State
 eval input@(e, env, k, o)
