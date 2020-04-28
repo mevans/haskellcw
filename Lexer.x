@@ -39,6 +39,7 @@ tokens :-
   \}       { \s -> TokenBraceRight }
   concat   { \s -> TokenConcat }
   pop      { \s -> TokenPop }
+  append   { \s -> TokenAppend }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}

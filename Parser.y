@@ -38,6 +38,7 @@ import Syntax
   '}' { TokenBraceRight }
   concat { TokenConcat }
   pop { TokenPop }
+  append { TokenAppend }
 
 %right push at length '[' range
 %left '+' '-' ']'
@@ -66,6 +67,7 @@ Exp : Exp at Exp { SAt $1 $3}
     | range Exp Exp { SRange $2 $3}
     | concat Exp Exp { SConcat $2 $3 }
     | pop Exp { SPop $2 }
+    | Exp append Exp { SAppend $1 $3 }
 
 Operation : '+' { Plus }
           | '-' { Minus }

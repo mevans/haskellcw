@@ -30,5 +30,6 @@ data Token =
   TokenBraceLeft |
   TokenConcat |
   TokenPop |
+  TokenAppend |
   TokenVar String
   deriving (Eq,Show)

@@ -15,6 +15,7 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HFor String [Exp] | ForH String [Int] [Exp] Int
            | HConcat Exp | ConcatH Exp
            | HPop
+           | HAppend Exp | AppendH Exp
     deriving Show
 type Kont = [ Frame ]
 
@@ -87,6 +88,14 @@ eval1 ((SIntList is), env, (ConcatH (SIntList ys)) : k, o) = ((SIntList (is ++ y
 eval1 ((SPop e), env, k, o) = (e, env, (HPop) : k, o)
 -- Once we have reduced the expression down to an int list, and HPop is the next thing to do, do it!
 eval1 (list@(SIntList is), env, (HPop) : k, o) = ((SIntList (init is)), env, k, o)
+
+-- Append
+-- First evaluate e1, which should be a list
+eval1 ((SAppend e1 e2), env, k, o) = (e1, env, (HAppend e2) : k, o)
+-- Now we've reached the list, evaluate what we're adding to the list
+eval1 (list@(SIntList is), env, (HAppend e) : k, o) = (e, env, (AppendH list) : k, o)
+-- When we are looking at an int, and we have a list for it to be appended to, stick it on the end!
+eval1 ((SInt i), env, (AppendH (SIntList is)) : k, o) = ((SIntList (is ++ [i])), env, k, o)
 
 -- Stream
 eval1 ((SStream n), env, k, o) = (getStream n env, env, k, o)

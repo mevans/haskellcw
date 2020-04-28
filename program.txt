@@ -1,1 +1,1 @@
-push (pop S1)
+push (S1 append 69)
