@@ -1,1 +1,1 @@
-push (concat S1 S2)
+push (pop S1)

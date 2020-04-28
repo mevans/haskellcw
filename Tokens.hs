@@ -29,5 +29,6 @@ data Token =
   TokenBraceRight |
   TokenBraceLeft |
   TokenConcat |
+  TokenPop |
   TokenVar String
   deriving (Eq,Show)

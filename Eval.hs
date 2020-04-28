@@ -14,8 +14,14 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
                                                     --  VVV Stores track of current statement in current cycle
            | HFor String [Exp] | ForH String [Int] [Exp] Int
            | HConcat Exp | ConcatH Exp
+           | HPop
     deriving Show
 type Kont = [ Frame ]
+
+-- Exp -> The current expression being looked at
+-- Environment -> The environment of the current scope, just the variables
+-- Kont -> A list of things we need to do
+-- Output -> Starts as an empty list, gets passed around and added to
 type State = (Exp, Environment, Kont, Output)
 
 getStream :: Int -> Environment -> Exp
@@ -75,6 +81,12 @@ eval1 ((SConcat e1 e2), env, k, o) = (e2, env, (HConcat e1) : k, o)
 eval1 (list@(SIntList is), env, (HConcat e) : k, o) = (e, env, (ConcatH list) : k, o)
 -- Once the other expression is reduced to an int list and the other int list we saved for later is here, return the combined list
 eval1 ((SIntList is), env, (ConcatH (SIntList ys)) : k, o) = ((SIntList (is ++ ys)), env, k, o)
+
+-- Pop
+-- First we need to evaluate the expression
+eval1 ((SPop e), env, k, o) = (e, env, (HPop) : k, o)
+-- Once we have reduced the expression down to an int list, and HPop is the next thing to do, do it!
+eval1 (list@(SIntList is), env, (HPop) : k, o) = ((SIntList (init is)), env, k, o)
 
 -- Stream
 eval1 ((SStream n), env, k, o) = (getStream n env, env, k, o)
