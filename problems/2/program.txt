@@ -1,0 +1,10 @@
+for i in (range 0 ((length S1) - 1)){
+    let c1 = (S3 at i)
+    let b1 = (S2 at i)
+    let a1 = (S1 at i)
+    push c1
+    push b1
+    push a1
+    push (a1 + b1)
+    push (b1 + c1)
+}
