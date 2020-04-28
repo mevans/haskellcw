@@ -39,6 +39,7 @@ import Syntax
   append { TokenAppend }
   '[' { TokenBracketLeft }
   ']' { TokenBracketRight }
+  ',' { TokenComma }
 
 %right push at length '[' range
 %left '+' '-' ']'
@@ -47,6 +48,10 @@ import Syntax
 
 Statements : Statement { [$1] }
            | Statement Statements { $1 : $2 }
+
+ExpressionList : Exp { [$1] }
+           | Exp ',' ExpressionList { $1 : $3 }
+           | { [] }
 
 Statement : push Exp { SPush $2 }
           | let var '=' Exp { SLet $2 $4 }
@@ -68,6 +73,7 @@ Exp : int { SInt $1 }
     | pop Exp { SPop $2 }
     | Exp append Exp { SAppend $1 $3 }
     | Exp '[' Exp ']' { SAt $1 $3 }
+    | '[' ExpressionList ']' { SExpList $2 }
 
 Operation : '+' { Plus }
           | '-' { Minus }

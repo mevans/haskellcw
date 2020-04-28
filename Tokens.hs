@@ -31,5 +31,6 @@ data Token =
   TokenAppend |
   TokenBracketLeft |
   TokenBracketRight |
+  TokenComma |
   TokenVar String
   deriving (Eq,Show)

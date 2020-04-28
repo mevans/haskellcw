@@ -23,6 +23,9 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            -- Variable, index
            | AssignAtH String Int
 
+           -- Expressions left, Already evaluated expressions
+           | HExpList [Exp] [Int]
+
     deriving Show
 type Kont = [ Frame ]
 
@@ -74,6 +77,15 @@ eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt (applyOperation opp i 
 eval1 ((SAssignOpp opp var e), env, k, o) = (e, env, (HAssignOpp opp var) : k, o)
 eval1 (e@(SInt i), env, (HAssignOpp opp var) : k, o) = (getVariable var env, env, (AssignOppH opp var e) : k, o)
 eval1 ((SInt i), env, (AssignOppH opp var (SInt j)) : k, o) = (SVoid, reassign var (SInt (applyOperation opp i j)) env, k, o)
+
+-- List creation
+-- Start evaluating first expression in list, and start with empty list of ints
+eval1((SExpList (e:es)), env, k, o) = (e, env, ((HExpList es [])) : k, o)
+-- Once evaluated to an int, add it to the list, and start evaluating the next expression
+eval1((SInt i), env, (HExpList (e:es) is) : k, o) = (e, env, (HExpList es (i:is)) : k, o)
+-- Once the last item is evaluated, return an int list
+-- It is then reversed as the evaluation starts from the beginning
+eval1((SInt i), env, (HExpList [] is) : k, o) = ((SIntList (reverse (i:is))), env, k, o)
 
 -- Length
 eval1 ((SLength l), env, k, o) = (l, env, (HLength env) : k, o)

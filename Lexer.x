@@ -41,5 +41,6 @@ tokens :-
   append   { \s -> TokenAppend }
   \[       { \s -> TokenBracketLeft }
   \]       { \s -> TokenBracketRight }
+  \,       { \s -> TokenComma }
   @number  { \s -> TokenInt (read s) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}

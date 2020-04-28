@@ -8,6 +8,7 @@ data Exp = SLet String Exp
          | SPush Exp
          | SInt Int
          | SIntList [Int]
+         | SExpList [Exp]
          | SVar String
          | SOpp Operation Exp Exp
          | SAssignOpp Operation String Exp
