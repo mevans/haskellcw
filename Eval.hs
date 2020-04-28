@@ -26,6 +26,19 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            -- Expressions left, Already evaluated expressions
            | HExpList [Exp] [Int]
 
+           -- Operation, reduces to int
+           | HComparisonOpp ComparisonOperation Exp
+           -- Operation, already evaluated exp 1
+           | ComparisonOppH ComparisonOperation Int
+
+           | HLogicalOpp LogicalOperation Exp
+           | LogicalOppH LogicalOperation Bool
+
+           -- Result if true, result if false
+           | HIf Exp Exp
+
+            | HNot
+
     deriving Show
 type Kont = [ Frame ]
 
@@ -65,6 +78,22 @@ applyOperation operation i j = result
                 Pow -> i ^ j
                 Mod -> mod i j
 
+applyComparisonOperation :: ComparisonOperation -> Int -> Int -> Bool
+applyComparisonOperation operation i j = result
+        where result = case operation of
+                Equal -> i == j
+                NotEqual -> i /= j
+                GreaterThan -> i > j
+                GreaterThanOrEq -> i >= j
+                LessThan -> i < j
+                LessThanOrEq -> i <= j
+
+applyLogicalOperation :: LogicalOperation -> Bool -> Bool -> Bool
+applyLogicalOperation operation b c = result
+        where result = case operation of
+                And -> b && c
+                Or -> b || c
+
 eval1 :: State -> State
 
 -- Operations
@@ -72,6 +101,25 @@ eval1 ((SOpp opp e1 e2), env, k, o) = (e1, env, (HOpp opp e2 env) : k, o)
 eval1 ((SInt i), env1, (HOpp opp e env2) : k, o) = (e, env2, (OppH opp (SInt i)) : k, o)
 eval1 ((SInt j), env, (OppH opp (SInt i)) : k, o) = (SInt (applyOperation opp i j), env, k, o)
 
+-- Comparison Operation
+eval1 ((SComparisonOpp opp e1 e2), env, k, o) = (e1, env, (HComparisonOpp opp e2) : k, o)
+eval1 ((SInt i1), env, (HComparisonOpp opp e2) : k, o) = (e2, env, (ComparisonOppH opp i1) : k, o)
+eval1 ((SInt i2), env, (ComparisonOppH opp i1) : k, o) = (SBool (applyComparisonOperation opp i1 i2), env, k, o)
+
+-- Logical Operation
+eval1 ((SLogicalOpp opp e1 e2), env, k, o) = (e1, env, (HLogicalOpp opp e2) : k, o)
+eval1 ((SBool b1), env, (HLogicalOpp opp e2) : k, o) = (e2, env, (LogicalOppH opp b1) : k, o)
+eval1 ((SBool b2), env, (LogicalOppH opp b1) : k, o) = (SBool result, env, k, o)
+    where result = applyLogicalOperation opp b1 b2
+
+-- 1 line if statement
+eval1 ((SIf e t f), env, k, o) = (e, env, (HIf t f) : k, o)
+eval1 ((SBool b), env, (HIf t f) : k, o) = (e, env, k, o)
+        where e = if b then t else f
+
+-- Not operator
+eval1 ((SNot e), env, k, o) = (e, env, (HNot) : k, o)
+eval1 ((SBool b), env, (HNot) : k, o) = (SBool (not b), env, k, o)
 
 -- Assign Operations
 eval1 ((SAssignOpp opp var e), env, k, o) = (e, env, (HAssignOpp opp var) : k, o)

@@ -32,11 +32,11 @@ main = do
     let programTokens = alexScanTokens programContents
 --    putStrLn(show programTokens)
     let parsedProgram = parse programTokens
---    putStrLn(show parsedProgram)
---    let initialState = ((head parsedProgram), initialEnv, [], [])
---    putStrLn(show (evalN numberEvals initialState))
-    let evaluatedBlock = evalBlock parsedProgram initialEnv []
-    putStrLn(show evaluatedBlock)
+    putStrLn(show parsedProgram)
+    let initialState = ((head parsedProgram), initialEnv, [], [])
+    putStrLn(show (evalN numberEvals initialState))
+--    let evaluatedBlock = evalBlock parsedProgram initialEnv []
+--    putStrLn(show evaluatedBlock)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName

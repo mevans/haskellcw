@@ -18,6 +18,13 @@ import Syntax
   '^' { TokenPower }
   '%' { TokenModulo }
 
+  -- Logical Operators
+  '>' { TokenGreaterThan }
+  '<' { TokenLessThan }
+  '!' { TokenNot }
+  "||" { TokenOr }
+  "&&" { TokenAnd }
+
   '(' { TokenParenLeft }
   ')' { TokenParenRight }
   var { TokenVar $$ }
@@ -63,9 +70,12 @@ Statement : push Exp { SPush $2 }
 Exp : int { SInt $1 }
     | var { SVar $1 }
     | Exp Operation Exp { SOpp $2 $1 $3 }
+    | Exp ComparisonOperation Exp { SComparisonOpp $2 $1 $3 }
+    | Exp LogicalOperation Exp { SLogicalOpp $2 $1 $3 }
+    | '!' Exp { SNot $2 }
     | '(' Exp ')' { $2 }
-    | true { STrue }
-    | false { SFalse }
+    | true { SBool True }
+    | false { SBool False }
     | if Exp then Exp else Exp { SIf $2 $4 $6}
     | length Exp { SLength $2 }
     | range Exp Exp { SRange $2 $3}
@@ -81,6 +91,16 @@ Operation : '+' { Plus }
           | '/' { Divide }
           | '%' { Mod }
           | '^' { Pow }
+
+ComparisonOperation : '=''=' { Equal }
+                    | '!''=' { NotEqual }
+                    | '>'  { GreaterThan }
+                    | '>''=' { GreaterThanOrEq }
+                    | '<'  { LessThan }
+                    | '<''=' { LessThanOrEq }
+
+LogicalOperation : "&&" { And }
+                 | "||" { Or }
 
 {
 

@@ -3,6 +3,12 @@ module Syntax where
 data Operation = Plus | Minus | Multiply | Divide | Pow | Mod
     deriving (Show, Eq)
 
+data ComparisonOperation = Equal | NotEqual | GreaterThan | GreaterThanOrEq | LessThan | LessThanOrEq
+    deriving (Show, Eq)
+
+data LogicalOperation = And | Or
+    deriving (Show, Eq)
+
 data Exp = SLet String Exp
          | SAt Exp Exp
          | SPush Exp
@@ -11,9 +17,11 @@ data Exp = SLet String Exp
          | SExpList [Exp]
          | SVar String
          | SOpp Operation Exp Exp
+         | SComparisonOpp ComparisonOperation Exp Exp
+         | SLogicalOpp LogicalOperation Exp Exp
          | SAssignOpp Operation String Exp
-         | STrue
-         | SFalse
+         | SBool Bool
+         | SNot Exp
          | SIf Exp Exp Exp
          | SLength Exp
          | SVoid

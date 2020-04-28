@@ -22,6 +22,15 @@ tokens :-
   \^       { \s -> TokenPower }
   \%       { \s -> TokenModulo }
 
+  -- Comparison Operators
+  \>       { \s -> TokenGreaterThan }
+  \<       { \s -> TokenLessThan }
+  \!       { \s -> TokenNot }
+
+  -- Logical Operators
+  \|\|     { \s -> TokenOr }
+  \&\&     { \s -> TokenAnd }
+
   \(       { \s -> TokenParenLeft }
   \)       { \s -> TokenParenRight }
   push     { \s -> TokenPush }

@@ -13,6 +13,13 @@ data Token =
   TokenPower |
   TokenModulo |
 
+  -- Logical Operators
+  TokenGreaterThan |
+  TokenLessThan |
+  TokenNot |
+  TokenOr |
+  TokenAnd |
+
   TokenParenLeft |
   TokenParenRight |
   TokenTrue |
