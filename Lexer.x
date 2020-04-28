@@ -37,6 +37,7 @@ tokens :-
   in       { \s -> TokenIn }
   \{       { \s -> TokenBraceLeft }
   \}       { \s -> TokenBraceRight }
+  concat   { \s -> TokenConcat }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}

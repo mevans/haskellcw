@@ -20,4 +20,5 @@ data Exp = SLet String Exp
          | SAssign String Exp
          | SRange Exp Exp
          | SFor String Exp [Exp]
+         | SConcat Exp Exp
     deriving (Show, Eq)

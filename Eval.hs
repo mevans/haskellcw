@@ -13,6 +13,7 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HRange Exp | RangeH Exp
                                                     --  VVV Stores track of current statement in current cycle
            | HFor String [Exp] | ForH String [Int] [Exp] Int
+           | HConcat Exp | ConcatH Exp
     deriving Show
 type Kont = [ Frame ]
 type State = (Exp, Environment, Kont, Output)
@@ -66,6 +67,14 @@ eval1 ((SInt i), env, (AssignOppH opp var (SInt j)) : k, o) = (SVoid, reassign v
 -- Length
 eval1 ((SLength l), env, k, o) = (l, env, (HLength env) : k, o)
 eval1 ((SIntList is), env1, (HLength env2) : k, o) = (SInt (length is), env2, k, o)
+
+-- Concat
+-- When you see a concat with 2 expressions, focus on simplifying the second expression, and save the other expression for later
+eval1 ((SConcat e1 e2), env, k, o) = (e2, env, (HConcat e1) : k, o)
+-- Once that second expression has been reduced to an int list and we see the other expression again, now reduce the other expression and save the int list for later
+eval1 (list@(SIntList is), env, (HConcat e) : k, o) = (e, env, (ConcatH list) : k, o)
+-- Once the other expression is reduced to an int list and the other int list we saved for later is here, return the combined list
+eval1 ((SIntList is), env, (ConcatH (SIntList ys)) : k, o) = ((SIntList (is ++ ys)), env, k, o)
 
 -- Stream
 eval1 ((SStream n), env, k, o) = (getStream n env, env, k, o)

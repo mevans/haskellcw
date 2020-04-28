@@ -36,6 +36,7 @@ import Syntax
   in { TokenIn }
   '{' { TokenBraceLeft }
   '}' { TokenBraceRight }
+  concat { TokenConcat }
 
 %right push at length '[' range
 %left '+' '-' ']'
@@ -62,6 +63,7 @@ Exp : Exp at Exp { SAt $1 $3}
     | if Exp then Exp else Exp { SIf $2 $4 $6}
     | length Exp { SLength $2 }
     | range Exp Exp { SRange $2 $3}
+    | concat Exp Exp { SConcat $2 $3 }
 
 Operation : '+' { Plus }
           | '-' { Minus }
