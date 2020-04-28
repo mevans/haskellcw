@@ -22,4 +22,6 @@ data Exp = SLet String Exp
          | SConcat Exp Exp
          | SPop Exp
          | SAppend Exp Exp
+         -- Variable, position, value
+         | SAssignAt String Exp Exp
     deriving (Show, Eq)

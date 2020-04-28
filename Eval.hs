@@ -1,5 +1,6 @@
 module Eval where
 import Syntax
+import Utils
 
 type Output = [Int]
 type Environment = [(String,Exp)]
@@ -16,6 +17,12 @@ data Frame = HOpp Operation Exp Environment | OppH Operation Exp
            | HConcat Exp | ConcatH Exp
            | HPop
            | HAppend Exp | AppendH Exp
+
+            -- Variable, reduces to exp
+           | HAssignAt String Exp
+           -- Variable, index
+           | AssignAtH String Int
+
     deriving Show
 type Kont = [ Frame ]
 
@@ -101,6 +108,16 @@ eval1 (e, env, (HLet var) : k, o) = (SVoid, addToEnvironment var e env, k, o)
 -- Re-assign variable
 eval1 ((SAssign var e), env, k, o) = (e, env, (HAssign var) : k, o)
 eval1 (e, env, (HAssign var) : k, o) = (SVoid, reassign var e env, k, o)
+
+-- Reassign value in list
+-- Evaluate index first
+eval1 ((SAssignAt var' index' elem'), env, k, o) = (index', env, (HAssignAt var' elem') : k, o)
+-- Then evaluate the exp
+eval1 ((SInt index), env, (HAssignAt var' elem') : k, o) = (elem', env, (AssignAtH var' index) : k, o)
+-- Fetch the list and put the exp and value into it
+eval1 ((SInt elem), env, (AssignAtH var' index) : k, o) = (SVoid, reassign var' newList env, k, o)
+    where (SIntList is) = getVariable var' env
+          newList = (SIntList (replaceAtIndex index elem is))
 
 -- Push value to output
 eval1 ((SPush e), env, k, o) = (e, env, (HPush env) : k, o)

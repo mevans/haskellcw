@@ -50,6 +50,7 @@ Statements : Statement { [$1] }
 
 Statement : push Exp { SPush $2 }
           | let var '=' Exp { SLet $2 $4 }
+          | var '[' Exp ']' '=' Exp { SAssignAt $1 $3 $6 }
           | var '=' Exp { SAssign $1 $3 }
           | var Operation '=' Exp { SAssignOpp $2 $1 $4 }
           | for var in Exp '{' Statements '}' { SFor $2 $4 $6 }
