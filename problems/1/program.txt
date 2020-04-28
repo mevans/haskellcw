@@ -1,5 +1,5 @@
-for i in (range 0 (((length S1) / 2) - 1)){
-    push (S1[i * 2])
-    push (S1[(i * 2) + 1])
-    push (S2[i])
+for i in (range 0 (((length a) / 2) - 1)){
+    push (a[i * 2])
+    push (a[(i * 2) + 1])
+    push (b[i])
 }

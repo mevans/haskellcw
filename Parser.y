@@ -22,7 +22,6 @@ import Syntax
   ')' { TokenParenRight }
   var { TokenVar $$ }
   int { TokenInt $$ }
-  stream { TokenStream $$ }
   push { TokenPush }
   true { TokenTrue }
   false { TokenFalse }
@@ -55,8 +54,7 @@ Statement : push Exp { SPush $2 }
           | var Operation '=' Exp { SAssignOpp $2 $1 $4 }
           | for var in Exp '{' Statements '}' { SFor $2 $4 $6 }
 
-Exp : stream { SStream $1 }
-    | int { SInt $1 }
+Exp : int { SInt $1 }
     | var { SVar $1 }
     | Exp Operation Exp { SOpp $2 $1 $3 }
     | '(' Exp ')' { $2 }

@@ -25,9 +25,6 @@ type Kont = [ Frame ]
 -- Output -> Starts as an empty list, gets passed around and added to
 type State = (Exp, Environment, Kont, Output)
 
-getStream :: Int -> Environment -> Exp
-getStream n env = getVariable ("S" ++ show n) env
-
 getVariable :: String -> Environment -> Exp
 getVariable var environment = case result of
                                 Just e -> e
@@ -96,9 +93,6 @@ eval1 ((SAppend e1 e2), env, k, o) = (e1, env, (HAppend e2) : k, o)
 eval1 (list@(SIntList is), env, (HAppend e) : k, o) = (e, env, (AppendH list) : k, o)
 -- When we are looking at an int, and we have a list for it to be appended to, stick it on the end!
 eval1 ((SInt i), env, (AppendH (SIntList is)) : k, o) = ((SIntList (is ++ [i])), env, k, o)
-
--- Stream
-eval1 ((SStream n), env, k, o) = (getStream n env, env, k, o)
 
 -- Let variable
 eval1 ((SLet var e), env, k, o) = (e, env, (HLet var) : k, o)

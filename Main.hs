@@ -5,11 +5,12 @@ import System.Environment
 import System.IO
 import Syntax
 import Data.List
+import Utils
 
 parseInput x = map (\l -> map (\n -> read n :: Int) l)(map words (lines x))
 
 columnsToEnvironment :: [[Int]] -> [(String,Exp)]
-columnsToEnvironment xs = zip (map (\n -> "S" ++ show n)[1..]) (map (\x -> (SIntList x)) xs)
+columnsToEnvironment xs = zip (map streamName [0..]) (map (\x -> (SIntList x)) xs)
 
 evalN :: Int -> State -> State
 evalN 0 s = s
@@ -22,6 +23,7 @@ main = do
     contents <- readFile input
     let lines = parseInput contents
     let streams = transpose lines
+    print streams
     let initialEnv = columnsToEnvironment streams
 --    let v = getStream 1 initialEnv
 
@@ -32,9 +34,9 @@ main = do
     let parsedProgram = parse programTokens
 --    putStrLn(show parsedProgram)
     let initialState = ((head parsedProgram), initialEnv, [], [])
---    putStrLn(show (evalN numberEvals initialState))
-    let evaluatedBlock = evalBlock parsedProgram initialEnv []
-    putStrLn(show evaluatedBlock)
+    putStrLn(show (evalN numberEvals initialState))
+--    let evaluatedBlock = evalBlock parsedProgram initialEnv []
+--    putStrLn(show evaluatedBlock)
 --    eval parsedProgram
 
 --    contents <- readFile textFileName

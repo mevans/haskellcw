@@ -6,7 +6,6 @@ data Operation = Plus | Minus | Multiply | Divide | Pow | Mod
 data Exp = SLet String Exp
          | SAt Exp Exp
          | SPush Exp
-         | SStream Int
          | SInt Int
          | SIntList [Int]
          | SVar String
