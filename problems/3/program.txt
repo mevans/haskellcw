@@ -1,7 +1,7 @@
 push 0
 for i in (range 0 (((length S2) / 2) -1)){
-	let b1 = (S2 at ((2 * i) + 1))
-	let a1 = (S1 at i)
+	let b1 = S2[(2 * i) + 1]
+	let a1 = S1[i]
 	push b1
 	push a1
 }

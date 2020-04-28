@@ -24,7 +24,6 @@ import Syntax
   int { TokenInt $$ }
   stream { TokenStream $$ }
   push { TokenPush }
-  at { TokenAt }
   true { TokenTrue }
   false { TokenFalse }
   if { TokenIf }
@@ -39,6 +38,8 @@ import Syntax
   concat { TokenConcat }
   pop { TokenPop }
   append { TokenAppend }
+  '[' { TokenBracketLeft }
+  ']' { TokenBracketRight }
 
 %right push at length '[' range
 %left '+' '-' ']'
@@ -54,8 +55,7 @@ Statement : push Exp { SPush $2 }
           | var Operation '=' Exp { SAssignOpp $2 $1 $4 }
           | for var in Exp '{' Statements '}' { SFor $2 $4 $6 }
 
-Exp : Exp at Exp { SAt $1 $3}
-    | stream { SStream $1 }
+Exp : stream { SStream $1 }
     | int { SInt $1 }
     | var { SVar $1 }
     | Exp Operation Exp { SOpp $2 $1 $3 }
@@ -68,6 +68,7 @@ Exp : Exp at Exp { SAt $1 $3}
     | concat Exp Exp { SConcat $2 $3 }
     | pop Exp { SPop $2 }
     | Exp append Exp { SAppend $1 $3 }
+    | Exp '[' Exp ']' { SAt $1 $3 }
 
 Operation : '+' { Plus }
           | '-' { Minus }

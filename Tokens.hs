@@ -4,7 +4,6 @@ data Token =
   TokenStream Int |
   TokenInt Int |
   TokenPush |
-  TokenAt |
   TokenLet |
   TokenEq |
   -- Operators
@@ -31,5 +30,7 @@ data Token =
   TokenConcat |
   TokenPop |
   TokenAppend |
+  TokenBracketLeft |
+  TokenBracketRight |
   TokenVar String
   deriving (Eq,Show)

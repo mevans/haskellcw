@@ -25,7 +25,6 @@ tokens :-
   \(       { \s -> TokenParenLeft }
   \)       { \s -> TokenParenRight }
   push     { \s -> TokenPush }
-  at       { \s -> TokenAt }
   true     { \s -> TokenTrue }
   false    { \s -> TokenFalse }
   if       { \s -> TokenIf }
@@ -40,6 +39,8 @@ tokens :-
   concat   { \s -> TokenConcat }
   pop      { \s -> TokenPop }
   append   { \s -> TokenAppend }
+  \[       { \s -> TokenBracketLeft }
+  \]       { \s -> TokenBracketRight }
   @number  { \s -> TokenInt (read s) }
   S@number { \s -> TokenStream (read (tail s)) }
   $alpha [$alpha $digit \_ \']* { \s -> TokenVar s}
