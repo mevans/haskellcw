@@ -1,0 +1,8 @@
+for i in (range 0 (((length a) / 3) -1)){
+	let c1 = a[((3 * i) + 2)]
+	let b1 = 2 * a[((3 * i) + 1)]
+	let a1 = (3 * a[(3 * i)]) - 1
+	push c1
+	push b1
+	push a1
+}

@@ -1,0 +1,5 @@
+let acc = 0
+for i in (range 0 (((length a) - 1))){
+    acc += a[i]
+    push acc
+}
